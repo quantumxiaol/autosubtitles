@@ -26,6 +26,20 @@ python 3.10
     ## macos
     brew install ffmpeg
 
+.env文件，需要代理地址、whisper的计算设备，OpenIA/Qwen的API KEY
+
+## RUN
+
+    python download_and_transcribe.py \
+        --url https://www.youtube.com/watch?v=LPZh9BOjkQs \
+        --output-dir ./tempfile \
+        --download-audio \
+        --original-language English \
+        --target-language Chinese
+    
+这将使用whisper的turbo模型对该视频进行音频转录和翻译，翻译依赖LLM，prompt模版在`prompt/translation.md`中，可以自行编辑，添加特殊的注意事项。
+    
+
 ## device
 
 使用cpu或者cuda，mps不支持稀疏张量的操作。
@@ -40,3 +54,26 @@ cookie 文件必须是 Mozilla/Netscape 格式，并且 cookies 文件的第一�
 ## Result
 
 [wisper的调用结果](./docs/result.md)
+
+## 项目结构
+
+    AUTOSUBTITLES
+    | |- docs/
+    | |- prompt/
+    | |   |- translation.md
+    | |- tempfile/                      # 存放中间的文件
+    | |- tests/
+    | |- whisper/                       # whisper的代码库
+    | |- .env
+    | |- .env.template
+    | |- audio_transcribe.py
+    | |- cookies.py
+    | |- cookies.txt
+    | |- download_and_transcribe.py     # 程序入口
+    | |- main.py
+    | |- processYoutube.py              # 根据youtube的链接处理视频
+    | |- pyproject.toml
+    | |- read_cookie_status.py          # 读取cookie文件的状态
+    | |- readme.md
+    | |- uv.lock
+    | |- youtube_video_download.py      # 下载youtube视频

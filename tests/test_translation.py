@@ -1,6 +1,6 @@
 import asyncio
 
-from audiotranscribe import processVideofiletoTexts,write_bilingual_srt
+from audio_transcribe import processVideofiletoTexts,write_bilingual_srt
 
 audio_path="YouTubeRewind.webm"
 text=processVideofiletoTexts("./tempfile",audio_path)

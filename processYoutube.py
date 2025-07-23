@@ -6,7 +6,7 @@ from pathlib import Path
 
 
 from youtube_video_download import download_youtube,download_youtube_audio,convert_webm_to_mp3
-from audiotranscribe import processVideofiletoTexts,write_bilingual_srt
+from audio_transcribe import processVideofiletoTexts,write_bilingual_srt
 
 async def process_youtube_video(
     url: str,

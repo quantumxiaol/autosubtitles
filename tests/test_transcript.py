@@ -1,4 +1,4 @@
-from audiotranscribe import processVideofiletoTexts,process_YT_video_url
+from audio_transcribe import processVideofiletoTexts,process_YT_video_url
 
 # audio_url="https://llm-image-quantumxiaol.oss-cn-beijing.aliyuncs.com/TaoteChing.mp3"
 # text=process_audio_url(audio_url,output_path="./tempfile",model_name="turbo")
