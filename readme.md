@@ -1,8 +1,8 @@
 # auto subtitles
 
-通过[yt-dlp](https://github.com/yt-dlp/yt-dlp)下载youtube的视频，需要使用cookies。
+通过[yt-dlp](https://github.com/yt-dlp/yt-dlp)下载youtube的视频，需要使用cookies。yt-dlp的license为Unlicense license。
 
-使用[whisper](https://github.com/openai/whisper)进行字幕的获取。
+使用[whisper](https://github.com/openai/whisper)进行字幕的获取。whisper的license为MIT license。
 
 使用qwen进行翻译。输出双语字幕。
 
@@ -31,10 +31,10 @@ python 3.10
 ## RUN
 
     python download_and_transcribe.py \
-        --url https://www.youtube.com/watch?v=LPZh9BOjkQs \
+        --url https://www.youtube.com/watch?v=cFYjDxGtjx0 \
         --output-dir ./tempfile \
         --download-audio \
-        --original-language English \
+        --original-language Japanese \
         --target-language Chinese
     
 这将使用whisper的turbo模型对该视频进行音频转录和翻译，翻译依赖LLM，prompt模版在`prompt/translation.md`中，可以自行编辑，添加特殊的注意事项。
@@ -77,3 +77,9 @@ cookie 文件必须是 Mozilla/Netscape 格式，并且 cookies 文件的第一�
     | |- readme.md
     | |- uv.lock
     | |- youtube_video_download.py      # 下载youtube视频
+
+## NOTICE
+
+⚠️ Notice: This project is intended solely for educational and personal learning purposes. Please do not use it for unauthorized content redistribution or copyright infringement. The developers assume no legal responsibility for any misuse of this tool. Use it at your own risk and ensure compliance with applicable laws and YouTube's Terms of Service.
+
+⚠️ 请注意：本项目仅用于教育和个人学习目的，请勿用于未经授权的内容传播或侵犯版权的行为。开发者不对任何不当使用本工具所引发的法律问题承担任何责任。使用时请确保遵守相关法律法规及YouTube的服务条款。
