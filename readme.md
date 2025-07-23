@@ -31,13 +31,15 @@ python 3.10
 ## RUN
 
     python download_and_transcribe.py \
-        --url https://www.youtube.com/watch?v=cFYjDxGtjx0 \
+        --url "https://www.youtube.com/watch?v=cFYjDxGtjx0" \
         --output-dir ./tempfile \
         --download-audio \
         --original-language Japanese \
         --target-language Chinese
     
 这将使用whisper的turbo模型对该视频进行音频转录和翻译，翻译依赖LLM，prompt模版在`prompt/translation.md`中，可以自行编辑，添加特殊的注意事项。
+
+--url 的内容需要""包围，否则会截断命令行无法识别。Windows下" \\ "无法识别，使用" ` "替代。
     
 
 ## device
@@ -77,6 +79,14 @@ cookie 文件必须是 Mozilla/Netscape 格式，并且 cookies 文件的第一�
     | |- readme.md
     | |- uv.lock
     | |- youtube_video_download.py      # 下载youtube视频
+
+## License
+
+Third-Party Code
+
+The "whisper/" directory is a copy of the OpenAI Whisper project, which is released under the Unlicense.
+
+See the "whisper/LICENSE" file for the original license terms.
 
 ## NOTICE
 
