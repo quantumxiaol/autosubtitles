@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 python -m autosubtitles \
-    --url https://www.youtube.com/watch?v=LPZh9BOjkQs \
+    --url "https://www.youtube.com/watch?v=LPZh9BOjkQs" \
     --output-dir ./tempfile \
     --download-audio \
     --original-language English \
