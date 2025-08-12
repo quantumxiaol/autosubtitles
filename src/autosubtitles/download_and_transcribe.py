@@ -14,7 +14,7 @@ import argparse
 import asyncio
 import os
 
-from processYoutube import process_youtube_video
+from autosubtitles.processYoutube import process_youtube_video
 
 def main():
     parser = argparse.ArgumentParser(description="下载 YouTube 视频并使用 Whisper 生成字幕")

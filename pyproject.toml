@@ -25,3 +25,13 @@ dependencies = [
 
 [tool.uv.sources]
 openai-whisper = { path = "whisper", editable = true }
+
+[tool.setuptools.packages.find]
+where = ["src"] 
+
+[tool.setuptools.package-dir]
+"" = "src" 
+
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"

@@ -12,6 +12,8 @@
 
 ## Environment
 
+### python
+
 python 3.10
 
 使用可编辑的方式安装了whisper
@@ -26,11 +28,24 @@ python 3.10
     ## macos
     brew install ffmpeg
 
-.env文件，需要代理地址、whisper的计算设备，OpenAI/Qwen的API KEY
+.env
+
+.env文件，需要代理地址、whisper的计算设备、模型，OpenAI/Qwen的API KEY
+
+whisper模型如下
+
+|  Size  | Parameters | English-only model | Multilingual model | Required VRAM | Relative speed |
+|:------:|:----------:|:------------------:|:------------------:|:-------------:|:--------------:|
+|  tiny  |    39 M    |     `tiny.en`      |       `tiny`       |     ~1 GB     |      ~10x      |
+|  base  |    74 M    |     `base.en`      |       `base`       |     ~1 GB     |      ~7x       |
+| small  |   244 M    |     `small.en`     |      `small`       |     ~2 GB     |      ~4x       |
+| medium |   769 M    |    `medium.en`     |      `medium`      |     ~5 GB     |      ~2x       |
+| large  |   1550 M   |        N/A         |      `large`       |    ~10 GB     |       1x       |
+| turbo  |   809 M    |        N/A         |      `turbo`       |     ~6 GB     |      ~8x       |
 
 ## RUN
 
-    python download_and_transcribe.py \
+    python main.py \
         --url "https://www.youtube.com/watch?v=cFYjDxGtjx0" \
         --output-dir ./tempfile \
         --download-audio \
@@ -68,17 +83,21 @@ cookie 文件必须是 Mozilla/Netscape 格式，并且 cookies 文件的第一�
     | |- whisper/                       # whisper的代码库
     | |- .env
     | |- .env.template
-    | |- audio_transcribe.py
-    | |- cookies.py
+    | |- src/autosubtitles/
+    | | |- __init__.py
+    | | |- __main__.py
+    | | |- read_cookie_status.py        # 读取cookie文件的状态
+    | | |- processYoutube.py            # 根据youtube的链接处理视频
+    | | |- download_and_transcribe.py   # 程序入口
+    | | |- youtube_video_download.py    # 下载youtube视频
+    | | |- audio_transcribe.py
+    | |- cookies.py                     # cookie示例（来源于OAgent）
     | |- cookies.txt
-    | |- download_and_transcribe.py     # 程序入口
-    | |- main.py
-    | |- processYoutube.py              # 根据youtube的链接处理视频
+    | |- main.py                        # 程序入口
     | |- pyproject.toml
-    | |- read_cookie_status.py          # 读取cookie文件的状态
     | |- readme.md
     | |- uv.lock
-    | |- youtube_video_download.py      # 下载youtube视频
+
 
 ## License
 

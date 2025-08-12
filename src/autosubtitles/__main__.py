@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-python main.py \
+python -m autosubtitles \
     --url https://www.youtube.com/watch?v=LPZh9BOjkQs \
     --output-dir ./tempfile \
     --download-audio \

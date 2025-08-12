@@ -6,3 +6,4 @@ venv/
 cookies.txt
 *.log
 .DS_Store
+*.egg-info

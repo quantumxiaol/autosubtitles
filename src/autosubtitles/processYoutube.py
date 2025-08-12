@@ -4,13 +4,16 @@ import hashlib
 
 from pathlib import Path
 
+from autosubtitles.youtube_video_download import download_youtube,download_youtube_audio,convert_webm_to_mp3
+from autosubtitles.audio_transcribe import processVideofiletoTexts,write_bilingual_srt
 
-from youtube_video_download import download_youtube,download_youtube_audio,convert_webm_to_mp3
-from audio_transcribe import processVideofiletoTexts,write_bilingual_srt
+from autosubtitles.config import config
 
+output_dir=config.OUTPUT_DIR
+whisper_model=config.WHISPER_MODEL
 async def process_youtube_video(
     url: str,
-    output_dir: str = "./tempfile",
+    output_dir: str = output_dir,
     download_audio: bool = True,
     original_language: str = "English",
     target_language: str = "Chinese",
@@ -81,7 +84,7 @@ async def process_youtube_video(
 
     except Exception as e:
         print(f"❌ 处理失败：{e}")
-        raise e
+        raise
 
 def generate_safe_filename_from_url(url: str) -> str:
     """

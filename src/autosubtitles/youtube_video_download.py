@@ -11,23 +11,28 @@ import urllib.request
 from urllib.parse import urlparse
 from dotenv import load_dotenv
 
-load_dotenv(".env")
+from autosubtitles.config import config
 
-proxy_host = os.getenv("PROXY_HOST")
-proxy_port = os.getenv("PROXY_PORT")
-proxy_url= os.getenv("PROXY_URL")
 # 设置代理
-proxies = {
-    "http": f"http://{proxy_host}:{proxy_port}",
-    "https": f"http://{proxy_host}:{proxy_port}",
-}
+proxy_host = config.PROXY_HOST
+proxy_port = config.PROXY_PORT
+proxy_url = config.PROXY_URL
+proxies = config.get_proxy_dict()
 proxy_handler = urllib.request.ProxyHandler(proxies)
 
-print(f"🌐 Youtube 使用代理：{proxy_url}")
-if not all([proxy_host,proxy_port]):
-    raise ValueError("缺少必要的环境变量，请检查 .env 文件")
-response = requests.get("https://www.youtube.com", proxies=proxies)
-print(response.status_code)
+print(f"🌐 Youtube 使用代理：{proxies}")
+
+
+
+def proxy_test():
+    try:
+        response = requests.get("https://www.youtube.com", proxies=proxies, timeout=20)
+        print(f"✅ 代理测试成功：{response.status_code}")
+        return True
+    except requests.exceptions.RequestException as e:
+        print(f"❌ 网络请求失败: {e}")
+        return None
+
 def convert_webm_to_mp3(input_path: str, output_path: str = None):
     """
     将 .webm 文件转换为 .mp3 格式
@@ -80,7 +85,7 @@ def download_youtube(url: str, output_path: str = ".", only_audio: bool = True):
     try:
         ydl_opts = {
             'format': 'bestaudio/best' if only_audio else 'bestvideo+bestaudio/best',  # 根据only_audio选择格式
-            'outtmpl': os.path.join(output_path, '%(id)s'),  # 输出模板
+            'outtmpl': os.path.join(output_path, '%(id)s.%(ext)s'),  # 输出模板
             'proxy': f"http://{proxy_host}:{proxy_port}",  # 设置代理
             'noplaylist': True,  # 只下载单个视频而不是播放列表
             'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
@@ -93,13 +98,14 @@ def download_youtube(url: str, output_path: str = ".", only_audio: bool = True):
         
 
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-            if ydl==None:
-                raise Exception("ydl is None")
             info_dict = ydl.extract_info(url, download=True)
             video_title = info_dict.get('title', None)
             video_ext = info_dict.get('ext', 'mp4')
-            original_filename = f"{video_title}.{video_ext}"
-            downloaded_path = get_available_filename(output_path, original_filename)
+            print(f"Video Title: {video_title}")
+            # original_filename = f"{video_title}.{video_ext}"
+            downloaded_path = ydl.prepare_filename(info_dict)
+        
+            # downloaded_path = get_available_filename(output_path, original_filename)
 
             print(f"Download completed! File saved to {downloaded_path}")
             return os.path.abspath(downloaded_path)
@@ -140,7 +146,7 @@ def download_youtube_audio(url: str, output_path: str = ".", only_audio: bool = 
         audio.export(mp3_file, format="mp3")
 
         # 删除原始文件（可选）
-        os.remove(original_file)
+        # os.remove(original_file)
         print(f"✅ 下载并转换完成！文件已保存为：{mp3_file}")
 
         return os.path.abspath(mp3_file)

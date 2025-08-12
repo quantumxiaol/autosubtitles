@@ -13,22 +13,21 @@ from langchain_openai import OpenAI, ChatOpenAI
 from typing import List,Dict
 from urllib.parse import urlparse
 from dotenv import load_dotenv
-from youtube_video_download import download_youtube_audio,add_suffix_to_filename
+from autosubtitles.youtube_video_download import download_youtube_audio,add_suffix_to_filename
 
-load_dotenv(".env")
+from autosubtitles.config import config
 
-proxy_host = os.getenv("PROXY_HOST")
-proxy_port = os.getenv("PROXY_PORT")
-proxy_url= os.getenv("PROXY_URL")
+output_dir=config.OUTPUT_DIR
+whisper_model=config.WHISPER_MODEL
 
-model=os.getenv("LLM_MODEL_NAME")
-api_key=os.getenv("LLM_MODEL_API_KEY")
-api_base=os.getenv("LLM_MODEL_BASE_URL")
+model = config.LLM_MODEL_NAME
+api_base=config.LLM_MODEL_BASE_URL
+api_key=config.LLM_MODEL_API_KEY
+
+device=config.DEVICE
+
 # 设置代理
-proxies = {
-    "http": f"http://{proxy_host}:{proxy_port}",
-    "https": f"http://{proxy_host}:{proxy_port}",
-}
+proxies = config.get_proxy_dict()
 proxy_handler = urllib.request.ProxyHandler(proxies)
 
 def format_timestamp(seconds: float) -> str:
@@ -40,7 +39,7 @@ def format_timestamp(seconds: float) -> str:
     seconds = milliseconds // 1_000
     milliseconds %= 1_000
     return f"{hours:02d}:{minutes:02d}:{seconds:02d},{milliseconds:03d}"
-def transcribe30s(model_name:str="turbo", audio_path:str="audio.mp3"):
+def transcribe30s(model_name:str=whisper_model, audio_path:str="audio.mp3"):
 
     model = whisper.load_model(model_name)
 
@@ -79,8 +78,10 @@ def get_free_gpu():
     free_gpus.sort(key=lambda x: x[1], reverse=True)
     return free_gpus[0][0]
 
-def transcribe(model_name:str="turbo", audio_path:str="audio.mp3"):
-    device=os.environ.get("DEVICE",default=get_free_gpu())
+def transcribe(model_name:str=whisper_model, audio_path:str="audio.mp3"):
+    global device
+    if device=="auto":
+        device=get_free_gpu()
     try:
         model = whisper.load_model(name=model_name,device=device)
         result = model.transcribe(audio_path)
@@ -90,9 +91,9 @@ def transcribe(model_name:str="turbo", audio_path:str="audio.mp3"):
         return segments
     except Exception as e:
         print(f"An error occurred during transcription: {e}")
-        raise str(e)
+        raise e
 
-def process_YT_video_url(url: str, output_path: str = ".", model_name: str = "turbo"):
+def process_YT_video_url(url: str, output_path: str = ".", model_name: str = whisper_model):
     """
     下载YouTube视频/音频，转录为文本，并删除下载的文件。
     :param url: YouTube视频URL
@@ -143,7 +144,7 @@ def processVideofiletoTexts(filedir:str,filepath: str):
     
     file=os.path.join(filedir,filepath)
     
-    return transcribe("turbo",file)
+    return transcribe(whisper_model,file)
 
 
 async def translation(text: str,original_language:str,target_language:str)-> str:
