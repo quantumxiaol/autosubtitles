@@ -26,7 +26,7 @@ python 3.10
     ## macos
     brew install ffmpeg
 
-.env文件，需要代理地址、whisper的计算设备，OpenIA/Qwen的API KEY
+.env文件，需要代理地址、whisper的计算设备，OpenAI/Qwen的API KEY
 
 ## RUN
 
@@ -40,7 +40,6 @@ python 3.10
 这将使用whisper的turbo模型对该视频进行音频转录和翻译，翻译依赖LLM，prompt模版在`prompt/translation.md`中，可以自行编辑，添加特殊的注意事项。
 
 --url 的内容需要""包围，否则会截断命令行无法识别。Windows下" \\ "无法识别，使用" ` "替代。
-    
 
 ## device
 
@@ -52,6 +51,7 @@ python 3.10
 
 cookie 文件必须是 Mozilla/Netscape 格式，并且 cookies 文件的第一行必须是`# HTTP Cookie File`或者`# Netscape HTTP Cookie File`，
 
+使用`python read_cooike_status.py` 读取cookie文件的状态，查看是否过期
 
 ## Result
 
